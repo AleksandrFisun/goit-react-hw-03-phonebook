@@ -1,12 +1,12 @@
 import { Component } from 'react';
 import shortid from 'shortid';
-import initialContacts from './contacts.json';
+// import initialContacts from './contacts.json';
 import { PhoneBook } from './phonebook/PhoneBook';
 import ContactSearch from './phonebook-search/PhoneBookSearch';
 import ContactList from './phonebook-list/PhoneBookList';
 export class App extends Component {
   state = {
-    contacts: initialContacts,
+    contacts: [],
     filter: '',
   };
   addContacts = ({ name, number, id = shortid() }) => {
@@ -37,6 +37,18 @@ export class App extends Component {
       contact.name.toLowerCase().includes(normalizedFilter)
     );
   };
+  componentDidMount() {
+    const contacts = localStorage.getItem('contacts');
+    const parseContact = JSON.parse(contacts);
+    if (parseContact) {
+      this.setState({ contacts: parseContact });
+    }
+  }
+  componentDidUpdate(_, prevState) {
+    if (this.state.contacts !== prevState.contacts) {
+      localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
+    }
+  }
   render() {
     const { filter } = this.state;
     const visibleContact = this.getVisibleContact();
