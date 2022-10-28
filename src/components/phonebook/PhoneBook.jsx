@@ -21,7 +21,6 @@ const FormError = ({ name }) => {
 };
 export class PhoneBook extends Component {
   handleSubmit = (values, { resetForm }) => {
-    console.log(values);
     this.props.onSubmit(values);
     resetForm();
   };
